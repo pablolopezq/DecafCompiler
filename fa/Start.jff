@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 7.1.--><structure>
+	<type>fa</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="0" name="q0">
+			<x>112.0</x>
+			<y>159.0</y>
+			<label>text=""</label>
+			<initial/>
+		</state>
+		<state id="1" name="q1">
+			<x>292.0</x>
+			<y>164.0</y>
+		</state>
+		<state id="2" name="q2">
+			<x>463.0</x>
+			<y>157.0</y>
+			<label>Symbol::Eof</label>
+			<final/>
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>1</from>
+			<to>1</to>
+			<read>-EOL</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<read/>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>1</to>
+			<read>-SPACE</read>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>1</to>
+			<read>-TAB</read>
+		</transition>
+		<transition>
+			<from>1</from>
+			<to>2</to>
+			<read>-EOF</read>
+		</transition>
+		<note>
+			<text>Name:Start</text>
+			<x>82.0</x>
+			<y>14.0</y>
+		</note>
+		<note>
+			<text>Token Description
+KW_BREAK=KW_BREAK
+KW_WHILE=KW_WHILE
+KW_BOOL=KW_BOOL
+KW_VOID=KW_VOID
+KW_CONTINUE=KW_CONTINUE
+KW_CLASS=KW_CLASS
+KW_ELSE=KW_ELSE
+KW_EXTENDS=KW_EXTENDS
+KW_FALSE=KW_FALSE
+KW_FOR=KW_FOR
+KW_IF=KW_IF
+KW_INT=KW_INT
+KW_NEW=KW_NEW
+KW_NULL=KW_NULL
+KW_RETURN=KW_RETURN
+KW_ROT=KW_ROT
+KW_TRUE=KW_TRUE
+ID=ID</text>
+			<x>552.0</x>
+			<y>45.0</y>
+		</note>
+	</automaton>
+</structure>

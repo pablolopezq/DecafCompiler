@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--Created with JFLAP 7.1.--><structure>
+	<type>fa</type>
+	<automaton>
+		<!--The list of states.-->
+		<state id="0" name="q0">
+			<x>456.0</x>
+			<y>260.0</y>
+			<initial/>
+		</state>
+		<state id="1" name="q1">
+			<x>717.0</x>
+			<y>49.0</y>
+			<label>Symbol::SUM</label>
+			<final/>
+		</state>
+		<state id="2" name="q2">
+			<x>720.0</x>
+			<y>115.0</y>
+			<label>Symbol::SUB</label>
+			<final/>
+		</state>
+		<state id="3" name="q3">
+			<x>712.0</x>
+			<y>178.0</y>
+			<label>Symbol::MULT</label>
+			<final/>
+		</state>
+		<state id="4" name="q4">
+			<x>605.0</x>
+			<y>307.0</y>
+		</state>
+		<state id="5" name="%LCom">
+			<x>718.0</x>
+			<y>252.0</y>
+		</state>
+		<state id="6" name="q6">
+			<x>723.0</x>
+			<y>307.0</y>
+			<label>Symbol::DIV</label>
+			<final/>
+		</state>
+		<state id="7" name="%BCom">
+			<x>718.0</x>
+			<y>372.0</y>
+		</state>
+		<state id="8" name="q8">
+			<x>338.0</x>
+			<y>306.0</y>
+		</state>
+		<state id="9" name="q9">
+			<x>251.0</x>
+			<y>370.0</y>
+			<label>Symbol::ASSIGN</label>
+			<final/>
+		</state>
+		<state id="10" name="q10">
+			<x>463.0</x>
+			<y>169.0</y>
+		</state>
+		<state id="11" name="q11">
+			<x>563.0</x>
+			<y>97.0</y>
+			<label>Symbol::GT</label>
+			<final/>
+		</state>
+		<state id="12" name="q12">
+			<x>400.0</x>
+			<y>27.0</y>
+			<label>Symbol::GTE</label>
+			<final/>
+		</state>
+		<state id="13" name="q13">
+			<x>373.0</x>
+			<y>169.0</y>
+		</state>
+		<state id="14" name="q14">
+			<x>238.0</x>
+			<y>65.0</y>
+			<label>Symbol::LTE</label>
+			<final/>
+		</state>
+		<state id="15" name="q15">
+			<x>297.0</x>
+			<y>27.0</y>
+			<label>Symbol::LT</label>
+			<final/>
+		</state>
+		<state id="16" name="q16">
+			<x>519.0</x>
+			<y>34.0</y>
+			<label>Symbol::SHIFT_RIGHT</label>
+			<final/>
+		</state>
+		<state id="17" name="q17">
+			<x>217.0</x>
+			<y>140.0</y>
+			<label>Symbol::SHIFT_LEFT</label>
+			<final/>
+		</state>
+		<state id="18" name="q18">
+			<x>330.0</x>
+			<y>240.0</y>
+		</state>
+		<state id="19" name="q19">
+			<x>193.0</x>
+			<y>217.0</y>
+			<label>Symbol::NEGATION</label>
+			<final/>
+		</state>
+		<state id="20" name="q20">
+			<x>197.0</x>
+			<y>289.0</y>
+			<label>Symbol::NOT_EQUAL</label>
+			<final/>
+		</state>
+		<state id="21" name="q21">
+			<x>326.0</x>
+			<y>429.0</y>
+			<label>Symbol::EQUAL</label>
+			<final/>
+		</state>
+		<state id="22" name="q22">
+			<x>411.0</x>
+			<y>362.0</y>
+			<label>Symbol::MOD</label>
+			<final/>
+		</state>
+		<state id="23" name="q23">
+			<x>501.0</x>
+			<y>372.0</y>
+		</state>
+		<state id="24" name="q24">
+			<x>602.0</x>
+			<y>370.0</y>
+		</state>
+		<state id="25" name="q25">
+			<x>531.0</x>
+			<y>444.0</y>
+			<label>Symbol::OR</label>
+			<final/>
+		</state>
+		<state id="26" name="q26">
+			<x>659.0</x>
+			<y>426.0</y>
+			<label>Symbol::AND</label>
+			<final/>
+		</state>
+		<!--The list of transitions.-->
+		<transition>
+			<from>0</from>
+			<to>4</to>
+			<read>/</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>8</to>
+			<read>=</read>
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>16</to>
+			<read>&gt;</read>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>14</to>
+			<read/>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>24</to>
+			<read>&amp;</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>2</to>
+			<read>-</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>1</to>
+			<read>+</read>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>5</to>
+			<read>-/</read>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>7</to>
+			<read>-*</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>10</to>
+			<read>&gt;</read>
+		</transition>
+		<transition>
+			<from>4</from>
+			<to>6</to>
+			<read/>
+		</transition>
+		<transition>
+			<from>18</from>
+			<to>20</to>
+			<read>=</read>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>15</to>
+			<read>=</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>3</to>
+			<read>*</read>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>9</to>
+			<read/>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>18</to>
+			<read>!</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>23</to>
+			<read>|</read>
+		</transition>
+		<transition>
+			<from>23</from>
+			<to>25</to>
+			<read>|</read>
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>12</to>
+			<read>=</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>13</to>
+			<read>&lt;</read>
+		</transition>
+		<transition>
+			<from>24</from>
+			<to>26</to>
+			<read>&amp;</read>
+		</transition>
+		<transition>
+			<from>10</from>
+			<to>11</to>
+			<read/>
+		</transition>
+		<transition>
+			<from>18</from>
+			<to>19</to>
+			<read/>
+		</transition>
+		<transition>
+			<from>8</from>
+			<to>21</to>
+			<read>=</read>
+		</transition>
+		<transition>
+			<from>13</from>
+			<to>17</to>
+			<read>&lt;</read>
+		</transition>
+		<transition>
+			<from>0</from>
+			<to>22</to>
+			<read>%</read>
+		</transition>
+		<note>
+			<text>Name:Operators</text>
+			<x>89.0</x>
+			<y>40.0</y>
+		</note>
+	</automaton>
+</structure>

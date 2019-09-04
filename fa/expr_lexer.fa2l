@@ -1,0 +1,75 @@
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
+#include <sstream>
+#include "ExprLexer.h"
+
+/*!fa2lexer
+    %option generate.tokens = true;
+
+    %file "Start.jff";
+    %file "BCom.jff";
+    %file "LCom.jff";
+    %file "ID.jff";
+    %file "Operators.jff";
+    %file "Punctuation.jff";
+    %file "Numbers.jff";
+    %file "StringConst.jff";
+    %file "CharConst.jff";
+
+    %generate.state_enum(State);
+*/
+
+Symbol ExprLexer::checkKeyword(string text){
+    if(text == "break")
+        return Symbol::KW_BREAK;
+    else if(text == "while")
+        return Symbol::KW_WHILE;
+    else if(text == "bool")
+        return Symbol::KW_BOOL;
+    else if(text == "void")
+        return Symbol::KW_VOID;
+    else if(text == "continue")
+        return Symbol::KW_CONTINUE;
+    else if(text == "class")
+        return Symbol::KW_CLASS;
+    else if(text == "else")
+        return Symbol::KW_ELSE;
+    else if(text == "extends")
+        return Symbol::KW_EXTENDS;
+    else if(text == "false")
+        return Symbol::KW_FALSE;
+    else if(text == "for")
+        return Symbol::KW_FOR;
+    else if(text == "if")
+        return Symbol::KW_IF;
+    else if(text == "int")
+        return Symbol::KW_INT;
+    else if(text == "new")
+        return Symbol::KW_NEW;
+    else if(text == "null")
+        return Symbol::KW_NULL;
+    else if(text == "return")
+        return Symbol::KW_RETURN;
+    else if(text == "rot")
+        return Symbol::KW_ROT;
+    else if(text == "true")
+        return Symbol::KW_TRUE;
+    else
+        return Symbol::ID;
+}
+
+Symbol ExprLexer::getNextToken() 
+{
+    text = "";
+/*!fa2lexer
+    %generate.lexer (text);
+*/
+}
+
+const char *ExprLexer::tokenToString(Symbol tk)
+{
+/*!fa2lexer
+    %generate.toString (tk);
+*/
+}
