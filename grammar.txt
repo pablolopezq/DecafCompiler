@@ -1,0 +1,71 @@
+<program>->class <class-name> ‘{’ <field-decl>* <method-decl>* ‘}’
+
+<class-name> ->id
+
+<field-decl> -> <type> <field-decl-prime>
+
+<field-decl-prime> { id | id‘[’intConstant‘]’ }+, ‘;’
+                   | id ‘=’ <constant> ‘;’
+
+<method-decl> -> ( <type> | void ) id ‘(’ [{ <type> id }+,] ‘)’ <block>
+
+<block> ->‘{‘ <var-decl>* <statement>* ‘}’
+
+<var-decl> -> <type> {id}+, ‘;’
+
+<type> ->int | bool
+
+<statement> -> <assign>
+             | <method-call>
+             | if ‘(‘ <expr> ‘)’ <block> [else <block>]
+             | while ‘(‘ <expr> ‘)’ <block>
+             | for ‘(‘ {<assign>}+, ‘;’ <expr> ‘;’ {<assign>}+, ‘)’ <block>
+             | return [<expr>] ‘;’
+             | break ‘;’
+             | continue ‘;’
+             | <block>
+
+<assign> -> <lvalue> ‘=’ <expr>
+
+<method-call> ->id‘(‘ [{ <expr> }+,] ‘)’
+              | System.out.print ‘(‘ <argument> ‘)’
+              | System.out.println‘(‘ <argument> ‘)’
+              | System.in.read ‘(‘‘)’
+              | Random.nextInt ‘(‘ <expr> ‘)’
+
+<argument> ->stringConstant| <expr>
+
+<lvalue> ->id| id ‘[‘ <expr> ‘]’
+
+<expr> -> <expr1> ('||' <expr1>)*
+
+<expr1> -> <expr2> ('&&' <expr2>)*
+
+<expr2> -> <expr3> ( <eq-op> <expr3>)*
+
+<expr3> -> <expr4> ( <rel-op> <expr4> )*
+
+<expr4> -> <expr5> ( ('<<' | '>>') <expr5> )*
+
+<expr5> -> <expr6> ('%' <expr6>)*
+
+<expr6> -> <expr7> ( (+ | -) <expr7> )*
+
+<expr7> -> <expr8> ( ('*' | /) <expr8>)*
+
+<expr8> -> <expr9> (! <expr9>)*
+
+<expr9> -> <expr10> (- <expr10>)*
+
+<expr10> ->  <lvalue>
+           | <method-call>
+           | <constant>
+           | '(' <expr> ')'
+
+<rel-op> ->‘<’ | ‘>‘ | ‘<=’ | ‘>=’
+
+<eq-op> ->‘==’ | ‘!=‘
+
+<constant> ->intConstant | charConstant | <bool-constant>
+
+<bool-constant> ->true | false
