@@ -33,6 +33,20 @@
               | System.in.read ‘(‘‘)’
               | Random.nextInt ‘(‘ <expr> ‘)’
 
+<statement> -> id <id-next>
+             | if ‘(‘ <expr> ‘)’ <block> [else <block>]
+             | while ‘(‘ <expr> ‘)’ <block>
+             | for ‘(‘ {<assign>}+, ‘;’ <expr> ‘;’ {<assign>}+, ‘)’ <block>
+             | return [<expr>] ‘;’
+             | break ‘;’
+             | continue ‘;’
+             | <block>
+             | <method-call>
+
+<id-next> ->  ‘(‘ [{ <expr> }+,] ‘)’   // method-call
+            | ‘[‘ <expr> ‘]’           // lvalue
+            | ‘=’ <expr>               // assign
+
 <argument> ->stringConstant| <expr>
 
 <lvalue> ->id| id ‘[‘ <expr> ‘]’
@@ -55,9 +69,7 @@
 
 <expr8> -> <expr9> (! <expr9>)*
 
-<expr9> -> <expr10> (- <expr10>)*
-
-<expr10> ->  <lvalue>
+<expr9> ->  <lvalue>
            | <method-call>
            | <constant>
            | '(' <expr> ')'

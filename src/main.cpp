@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "ExprLexer.h"
+#include "ExprParser.h"
 
 using namespace std;
 
@@ -20,13 +20,24 @@ int main(int argc, char const *argv[]) {
 
     ExprLexer lexer(in);
     Symbol token;
+    ExprParser parser(lexer);
 
-    while(true) {
-        token = lexer.getNextToken();
-        if (token == Symbol::Eof)
-            break;
-        cout << lexer.tokenToString(token) << " '" << lexer.getText() << "'\n";
+
+    // while(true) {
+    //     token = lexer.getNextToken();
+    //     if (token == Symbol::Eof)
+    //         break;
+    //     cout << lexer.tokenToString(token) << " '" << lexer.getText() << "'\n";
+    // }
+
+    try{
+    	parser.parse();
+        std::cout << "Parsed successfully" << std::endl;
     }
+    catch(std::string& e){
+    	cerr << e << endl;
+    }
+
 
     in.close();
 

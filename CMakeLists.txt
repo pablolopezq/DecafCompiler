@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.0)
-project (file_explorer)
+project (decaf_compiler)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -7,12 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_custom_command(
-    
-)
-
 add_executable(${PROJECT_NAME}
                     src/main.cpp
-                    src/ExprLexer.cpp)
+                    src/ExprLexer.cpp
+                    src/ExprParser.cpp)
 
 target_link_libraries(${PROJECT_NAME} -static-libgcc -static-libstdc++ -L/usr/X11/lib -lX11 -lstdc++)

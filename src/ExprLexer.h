@@ -17,6 +17,9 @@ public:
 	Symbol getNextToken();
 	string getText(){ return text; }
 	const char * tokenToString(Symbol tk);
+    int getLine(){
+        return line;
+    }
 
 private:
 	ifstream& in;

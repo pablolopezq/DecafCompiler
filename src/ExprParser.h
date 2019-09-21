@@ -1,7 +1,8 @@
-#if !defined(EXPRPARSER_H))
+#if !defined(EXPRPARSER_H)
 #define EXPRPARSER_H
 
 #include "ExprLexer.h"
+#include "ExprAst.h"
 
 class ExprParser{
 
@@ -10,40 +11,42 @@ public:
 	void parse();
 
 private:
+
     ExprLexer &lexer;
     Symbol token;
 
-    void parse();
-    void Program();
-    void ClassName();
-    void FieldDecl();
-    void FieldDeclPrime();
-    void MethodDecl();
-    void Block();
-    void VarDecl();
-    void Type();
-    void Statement();
-    void Assign();
-    void MethodCall();
-    void Argument();
-    void LValue();
-    void Expr();
-    void Expr1();
-    void Expr2();
-    void Expr3();
-    void Expr4();
-    void Expr5();
-    void Expr6();
-    void Expr7();
-    void Expr8();
-    void Expr9();
-    void Expr10();
-    void RelOp();
-    void EqOp();
-    void Constant();
-    void BoolConstant();
+    // void Program();
+    // void ClassName();
+    // void FieldDecl();
+    // void MethodDecl();
+    // void FieldDeclPrime();
+    // void Block();
+    // void VarDecl();
+    // void Type();
+    // void Statement();
+    // void ID_Next();
+    // void Assign();
+    // void MethodCall();
+    // void Argument();
+    // void LValue();
+    ASTNode * Expr();
+    ASTNode * Expr1();
+    ASTNode * Expr2();
+    ASTNode * Expr3();
+    ASTNode * Expr4();
+    ASTNode * Expr5();
+    ASTNode * Expr6();
+    ASTNode * Expr7();
+    ASTNode * Expr8();
+    ASTNode * Expr9();
+    ASTNode * Expr10();
+    ASTNode * RelOp();
+    ASTNode * EqOp();
+    ASTNode * Constant();
+    ASTNode * BoolConstant();
+    ASTNode * MethodCall();
 
-    void throw_error(const char * error){
+    void throw_error(std::string error){
         throw error;
     }
 
@@ -51,7 +54,7 @@ private:
         if(token == tk)
             token = lexer.getNextToken();
         else
-           throw std::string("Expected ") + lexer.tokenToString(tk) + std::string(" but found ") + lexer.getText();
+           throw std::string("Expected ") + lexer.tokenToString(tk) + std::string(" but found ") + lexer.getText() + " in line " + std::to_string(lexer.getLine());
     }
 };
 
