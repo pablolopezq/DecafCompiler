@@ -23,6 +23,22 @@ private:
 
 };
 
+class IdExpr : public ASTNode{
+
+public:
+    IdExpr(std::string name, ASTNode * expr) : name(name), expr(expr){}
+
+private:
+    std::string name;
+    ASTNode * expr;
+};
+
+class MethodExpr : public ASTNode{
+
+public:
+    
+};
+
 #define DEFINE_BINARY_EXPR(name) \  
 class name##Expr : public BinaryExpr { \
 public: \

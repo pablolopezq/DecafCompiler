@@ -188,7 +188,7 @@ ASTNode * ExprParser::Expr9(){
         ret = Expr();
     }
     else if(token == Symbol::ID){
-        //handle id
+        ret = HandleID();
     }
     else if(lexer.getText() == "System" || lexer.getText() == "Random"){
         ret = MethodCall();
@@ -203,7 +203,42 @@ ASTNode * ExprParser::Constant(){
     ASTNode * ret;
 
     if(token == Symbol::Number){
-        // ret = new 
+        ret = new IntExpr(stoi(lexer.getText()));
+    }
+    else if(token == Symbol::CHAR_CONST){
+        ret = new CharExpr(lexer.getText()[0]);
+    }
+    else if(token == Symbol::KW_TRUE){
+        ret = new BoolExpr(true);
+    }
+    else{
+        ret = new BoolExpr(false);
+    }
+}
+
+ASTNode * ExprParser::HandleID(){
+
+    ASTNode * ret;
+
+    std::string name = lexer.getText();
+    token = lexer.getNextToken();
+
+    if(token == Symbol::OPEN_BRACKET){
+        
+        token = lexer.getNextToken();
+        ASTNode * expr = Expr();
+        expect(Symbol::CLOSE_BRACKET);
+
+        ret = new IdExpr(name, nullptr);
+    }
+    else if(token == Symbol::OPEN_PAREN){
+        
+        ASTNode * args = nullptr;
+        token = lexer.getNextToken();
+        if(token != Symbol::CLOSE_PAREN){
+            args = Args();
+        }
+        ret = new MethodExpr(name, args);
     }
 }
 

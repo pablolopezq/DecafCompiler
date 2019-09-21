@@ -45,6 +45,8 @@ private:
     ASTNode * Constant();
     ASTNode * BoolConstant();
     ASTNode * MethodCall();
+    ASTNode * HandleID();
+    ASTNode * Args();
 
     void throw_error(std::string error){
         throw error;
