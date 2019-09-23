@@ -5,18 +5,127 @@
 
 void ExprParser::parse(){
     token = lexer.getNextToken();
-    // Program();
-    ASTNode* expr = Expr();
+    Program();
+    // ASTNode* expr = Expr();
     if(token != Symbol::Eof){
-        throw std::string("Parser stopped on token: ") + lexer.getText();
+        throw std::string("Parser stopped unexpectedly on token: ") + lexer.getText();
     }
-    statements.push_back(expr);
+    // statements.push_back(expr);
 }
 
 ASTNode * ExprParser::Program(){
-    while(token == Symbol::ID){
 
+    // std::vector<ASTNode*> statements;
+
+    expect(Symbol::KW_CLASS);
+    expect(Symbol::ID);
+    expect(Symbol::OPEN_KEY);
+
+    while(token != Symbol::CLOSE_KEY){
+        if(token == Symbol::KW_VOID){
+            std::vector<ASTNode*> args;
+            advanceToken();
+            std::string method_name = lexer.getText();
+            expect(Symbol::ID);
+            expect(Symbol::OPEN_PAREN);
+            // if(token != Symbol::CLOSE_PAREN){
+            //     while(token == Symbol::COMMA){
+            //         if(token == Symbol::KW_BOOL){
+            //             advanceToken();
+            //             std::string param_name = lexer.getText();
+
+            //         }
+            //     }
+            // }
+            expect(Symbol::CLOSE_PAREN);
+            std::vector<ASTNode*> block;
+            block = Block();
+            ASTNode* push = new MethodDeclExpr(Type::Void, method_name, args, block);
+            statements.push_back(push);
+        }
+        // else if(token == Symbol::KW_BOOL){
+        //     advanceToken();
+        //     std::string name = lexer.getText();
+        //     expect(Symbol::ID);
+        //     if(token == Symbol::ASSIGN){
+        //         advanceToken();
+        //         ASTNode * con = Constant();
+        //         expect(Symbol::SEMICOLON);
+        //         fields.push_back(new FieldAssignExpr(Type::Bool, name, con));
+        //     }
+        //     else if(token == Symbol::OPEN_PAREN){
+
+        //     }
+        // }
+        // else if(token == Symbol::KW_INT){
+        //     advanceToken();
+        //     std::string name = lexer.getText();
+        //     expect(Symbol::ID);
+        //     if(token == Symbol::ASSIGN){
+        //         advanceToken();
+        //         ASTNode * con = Constant();
+        //         expect(Symbol::SEMICOLON);
+        //         fields.push_back(new FieldAssignExpr(Type::Int, name, con));
+        //     }
+        // }
     }
+    expect(Symbol::CLOSE_KEY);
+}
+
+std::vector<ASTNode*> ExprParser::Block(){
+
+    std::vector<ASTNode*> ret;
+
+    expect(Symbol::OPEN_KEY);
+
+    while(token != Symbol::CLOSE_KEY){
+
+        if(lexer.getText() == "System" || lexer.getText() == "Random"){
+            ASTNode * stmt = MethodCall();
+            expect(Symbol::SEMICOLON);
+            ret.push_back(stmt);
+        }
+        else if(token == Symbol::KW_INT || token == Symbol::KW_BOOL){
+            Symbol temp = token;
+            std::string var_name;
+            advanceToken();
+            var_name = lexer.getText();
+            expect(Symbol::ID);
+            ASTNode * expr;
+            if(temp == Symbol::KW_BOOL)
+                expr = new FieldExpr(Type::Bool, var_name);
+            else
+                expr = new FieldExpr(Type::Int, var_name);
+            
+            ret.push_back(expr);
+            
+            while(token == Symbol::COMMA){
+                advanceToken();
+                var_name = lexer.getText();
+                expect(Symbol::ID);
+                if(temp == Symbol::KW_BOOL)
+                    expr = new FieldExpr(Type::Bool, var_name);
+                else
+                    expr = new FieldExpr(Type::Int, var_name);
+                
+                ret.push_back(expr);
+            }
+            expect(Symbol::SEMICOLON);
+        }
+        else if(token == Symbol::ID){
+            std::string var_name = lexer.getText();;
+            advanceToken();
+            if(token == Symbol::ASSIGN){
+                advanceToken();
+                ASTNode * expr = Expr();
+                ASTNode * assign = new VarAssignExpr(var_name, expr);
+                ret.push_back(assign);
+            }
+            expect(Symbol::SEMICOLON);
+        }
+    }
+    expect(Symbol::CLOSE_KEY);
+    return ret;
 }
 
 ASTNode * ExprParser::Expr(){
@@ -66,7 +175,7 @@ ASTNode * ExprParser::Expr2(){
         advanceToken();
         right = Expr3();
 
-        if(token == Symbol::EQUAL){
+        if(temp == Symbol::EQUAL){
             left = new EqualExpr(left, right);
         }
         else{
@@ -90,13 +199,13 @@ ASTNode * ExprParser::Expr3(){
         advanceToken();
         right = Expr4();
 
-        if(token == Symbol::GT){
+        if(temp == Symbol::GT){
             left = new GreaterExpr(left, right);
         }
-        else if(token == Symbol::GTE){
+        else if(temp == Symbol::GTE){
             left = new GreaterEqualExpr(left, right);
         }
-        else if(token == Symbol::LT){
+        else if(temp == Symbol::LT){
             left = new LessExpr(left, right);
         }
         else{
@@ -119,7 +228,7 @@ ASTNode * ExprParser::Expr4(){
         advanceToken();
         right = Expr5();
 
-        if(token == Symbol::SHIFT_LEFT){
+        if(temp == Symbol::SHIFT_LEFT){
             left = new ShiftLeftExpr(left, right);
         }
         else{
@@ -137,6 +246,8 @@ ASTNode * ExprParser::Expr5(){
     ASTNode * right = nullptr;
 
     while(token == Symbol::MOD){
+
+        // std::cout << "Found mod expr\n";
 
         advanceToken();
 
@@ -156,13 +267,16 @@ ASTNode * ExprParser::Expr6(){
     while(token == Symbol::SUM || token == Symbol::SUB){
 
         Symbol temp = token;
+        // std::cout << lexer.getText();
         advanceToken();
         right = Expr6();
 
-        if(token == Symbol::SUM){
+        if(temp == Symbol::SUM){
+            // std::cout << "Found sum\n";
             left = new SumExpr(left, right);
         }
         else{
+            // std::cout << "Found sub\n";
             left = new SubExpr(left, right);
         }
     }
@@ -173,19 +287,22 @@ ASTNode * ExprParser::Expr6(){
 ASTNode * ExprParser::Expr7(){
     // cout << "Entered Expr7\n";
 
-    ASTNode * left = Expr8();
+    ASTNode * left = Expr9();
     ASTNode * right = nullptr;
 
     while(token == Symbol::MULT || token == Symbol::DIV){
 
         Symbol temp = token;
+        // std::cout << lexer.getText();
         advanceToken();
-        right = Expr8();
+        right = Expr9();
 
-        if(token == Symbol::MULT){
+        if(temp == Symbol::MULT){
+            // std::cout << "Found mult\n";
             left = new MultExpr(left, right);
         }
         else{
+            // std::cout << "Found div\n";
             left = new DivExpr(left, right);
         }
     }
@@ -193,22 +310,22 @@ ASTNode * ExprParser::Expr7(){
     return left;
 }
 
-ASTNode * ExprParser::Expr8(){
-    // cout << "Entered Expr8\n";
+// ASTNode * ExprParser::Expr8(){
+//     // cout << "Entered Expr8\n";
 
-    ASTNode * left = Expr9();
-    ASTNode * right = nullptr;
+//     ASTNode * left = Expr9();
+//     ASTNode * right = nullptr;
 
-    while(token == Symbol::NEGATION){
+//     while(token == Symbol::NEGATION){
 
-        advanceToken();
+//         advanceToken();
 
-        right = Expr9();
-        left = new NegationExpr(left, right);
-    }
+//         right = Expr9();
+//         left = new NegationExpr(left, right);
+//     }
 
-    return left;
-}
+//     return left;
+// }
 
 ASTNode * ExprParser::Expr9(){
     // cout << "Entered Expr9\n";
@@ -291,7 +408,7 @@ ASTNode * ExprParser::HandleID(){
     }
     else{
         ret = new IdExpr(name, nullptr);
-        // cout << "Returning id\n";
+        // cout << "Returning id " << name << "\n";;
     }
 
     return ret;
@@ -350,6 +467,7 @@ ASTNode * ExprParser::Argument(){
         return new StringExpr(param);
     }
     else{
+        // cout << "Getting expr param\n";
         return Expr();
     }
 }

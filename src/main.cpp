@@ -57,12 +57,15 @@ int main(int argc, char const *argv[]) {
 
     for(auto& e : tbl){
         inter_table.emplace(e.first, Value(e.second));
-        cout << e.first << endl;
+        // cout << e.first << endl;
     }
 
     // cout << "Built interp table\n";
 
     ExprInter interp(inter_table, statements);
+
+    // // cout << "stmts size " << statements.size() << endl;
+    // cout << "tbl size " << inter_table.size() << endl;
 
     // cout << "Created interp\n";
     // cout << "Executing code...\n";

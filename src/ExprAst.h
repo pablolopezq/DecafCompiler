@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 class Visitor;
 
@@ -24,8 +25,76 @@ struct Value{
     union{
         int num_val;
         bool bool_val;
+        char char_val;
     };
     std::string string_val;
+
+    Value operator +(Value v){
+        Value ret(Type::Int);
+        ret.num_val = this->num_val + v.num_val;
+        // std::cout << "Sum is " << ret.num_val << std::endl;
+        return ret;
+    }
+
+    Value operator -(Value v){
+        Value ret(Type::Int);
+        ret.num_val = this->num_val - v.num_val;
+        return ret;
+    }
+
+    Value operator *(Value v){
+        Value ret(Type::Int);
+        ret.num_val = this->num_val * v.num_val;
+        return ret;
+    }
+
+    Value operator /(Value v){
+        Value ret(Type::Int);
+        ret.num_val = this->num_val / v.num_val;
+        return ret;
+    }
+
+    Value operator %(Value v){
+        Value ret(Type::Int);
+        ret.num_val = this->num_val % v.num_val;
+        return ret;
+    }
+
+    Value operator <(Value v){
+        Value ret(Type::Bool);
+        ret.bool_val = this->bool_val < v.bool_val;
+        return ret;
+    }
+
+    Value operator >(Value v){
+        Value ret(Type::Bool);
+        ret.bool_val = this->bool_val > v.bool_val;
+        return ret;
+    }
+
+    Value operator <=(Value v){
+        Value ret(Type::Bool);
+        ret.bool_val = this->bool_val <= v.bool_val;
+        return ret;
+    }
+
+    Value operator >=(Value v){
+        Value ret(Type::Bool);
+        ret.bool_val = this->bool_val >= v.bool_val;
+        return ret;
+    }
+
+    Value operator ==(Value v){
+        Value ret(Type::Bool);
+        ret.bool_val = this->bool_val == v.bool_val;
+        return ret;
+    }
+
+    Value operator !=(Value v){
+        Value ret(Type::Bool);
+        ret.bool_val = this->bool_val != v.bool_val;
+        return ret;
+    }
     
 };
 
@@ -60,7 +129,10 @@ enum class NodeKind{
     AndExpr,
     OrExpr,
     NegationExpr,
-    MethodDecl
+    MethodDeclExpr,
+    FieldAssignExpr,
+    BlockExpr,
+    VarAssignExpr
 };
 
 class ASTNode {
@@ -78,39 +150,70 @@ public:
     
 };
 
-class ProgramExpr : public ASTNode{
+// class ProgramExpr : public ASTNode{
 
-public:
-    ProgramExpr(std::string name, std::vector<ASTNode*> * fields, std::vector<ASTNode*> * methods) : 
-                name(name), fields(fields), methods(methods)
-                { kind = NodeKind::ProgramExpr; }
+// public:
+//     ProgramExpr(std::string name, std::vector<ASTNode*> fields, std::vector<ASTNode*> methods) : 
+//                 name(name), fields(fields), methods(methods)
+//                 { kind = NodeKind::ProgramExpr; }
             
-    std::string name;
-    std::vector<ASTNode*> * fields;
-    std::vector<ASTNode*> * methods;
-};
+//     std::string name;
+//     std::vector<ASTNode*> fields;
+//     std::vector<ASTNode*> methods;
+// };
 
 class FieldExpr : public ASTNode{
 
 public:
-    FieldExpr(){ kind = NodeKind::FieldExpr; }
-
-    Type type;
-    ASTNode * id;
-};
-
-class MethodDecl : public ASTNode{
-
-public:
-    MethodDecl(Type type, std::string name, ASTNode * args, ASTNode * block) : 
-    type(type), name(name), args(args), block(block) 
-    { kind = NodeKind::MethodDecl; }
+    FieldExpr(Type type, std::string name) : 
+    type(type), name(name) { kind = NodeKind::FieldExpr; }
 
     Type type;
     std::string name;
-    ASTNode * args;
-    ASTNode * block;
+};
 
+class VarAssignExpr : public ASTNode{
+
+public:
+    VarAssignExpr(std::string name, ASTNode * expr) :
+    name(name), expr(expr) { kind = NodeKind::VarAssignExpr; }
+
+    std::string name;
+    ASTNode * expr;
+};
+
+class FieldAssignExpr : public ASTNode{
+
+public:
+    FieldAssignExpr(Type type, std::string name, ASTNode * constant) :
+    type(type), name(name), constant(constant) { kind = NodeKind::FieldAssignExpr; }
+
+    Type type;
+    std::string name;
+    ASTNode * constant;
+};
+
+class MethodDeclExpr : public ASTNode{
+
+public:
+    MethodDeclExpr(Type type, std::string name, std::vector<ASTNode*> args, std::vector<ASTNode*> block) : 
+    type(type), name(name), args(args), block(block) 
+    { kind = NodeKind::MethodDeclExpr; }
+
+    Type type;
+    std::string name;
+    std::vector<ASTNode*> args;
+    std::vector<ASTNode*> block;
+
+};
+
+class BlockExpr : public ASTNode{
+
+public:
+    BlockExpr(std::vector<ASTNode*> statements):
+    statements(statements) { kind = NodeKind::BlockExpr; }
+
+    std::vector<ASTNode*> statements;
 };
 
 class BinaryExpr : public ASTNode {
@@ -187,6 +290,13 @@ public:
     ASTNode * expr;
 };
 
+class NegationExpr : public ASTNode{
+
+public:
+    NegationExpr(ASTNode * expr) : expr(expr) { kind = NodeKind::NegationExpr; }
+
+    ASTNode * expr;
+};
 
 #define DEFINE_BINARY_EXPR(name) \
 class name##Expr : public BinaryExpr { \
@@ -224,6 +334,5 @@ DEFINE_BINARY_EXPR(Equal);
 DEFINE_BINARY_EXPR(NotEqual);
 DEFINE_BINARY_EXPR(And);
 DEFINE_BINARY_EXPR(Or);
-DEFINE_BINARY_EXPR(Negation);
 
 #endif

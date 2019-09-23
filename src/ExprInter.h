@@ -24,15 +24,18 @@ private:
     class Visitor{
     
     public:
-        Visitor(SymbTbl& tbl) : tbl(tbl) {}
+        Visitor(SymbTbl& tbl, std::vector<ASTNode*>& statements) : tbl(tbl), statements(statements) {}
 
         Value visit(ASTNode* node);
 
     private:
         SymbTbl tbl;
+        std::vector<ASTNode*> statements;
 
+        Value visit(VarAssignExpr * node);
         Value visit(IdExpr * node);
         Value visit(MethodCallExpr * node);
+        Value visit(MethodDeclExpr * node);
         Value visit(ArgsExpr * node);
         Value visit(PrintlnExpr * node);
         Value visit(PrintExpr * node);

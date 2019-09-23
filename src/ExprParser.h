@@ -56,6 +56,10 @@ private:
     ASTNode * Args();
     ASTNode * Argument();
     ASTNode * Program();
+    ASTNode * Assign();
+    std::vector<ASTNode*> Block();
+    std::vector<ASTNode*> FieldDecl();
+    std::vector<ASTNode*> MethodDecl();
 
     void advanceToken(){
         token = lexer.getNextToken();
