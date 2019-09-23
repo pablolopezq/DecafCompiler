@@ -34,6 +34,8 @@ private:
 
         Value visit(VarAssignExpr * node);
         Value visit(IfExpr * node);
+        Value visit(ForExpr * node);
+        Value visit(WhileExpr * node);
         Value visit(IdExpr * node);
         Value visit(MethodCallExpr * node);
         Value visit(MethodDeclExpr * node);

@@ -12,7 +12,7 @@ class WhileTest {
         total = 0;
         count = 0;
 
-        while (count < 3) {
+        while (count <= 3) {
             number = (count + 1) * 10;
             System.out.print("Number [");
             System.out.print(count);

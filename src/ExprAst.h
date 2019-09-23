@@ -134,6 +134,8 @@ enum class NodeKind{
     BlockExpr,
     VarAssignExpr,
     IfExpr,
+    WhileExpr,
+    ForExpr
 };
 
 class ASTNode {
@@ -310,6 +312,34 @@ public:
     ASTNode * expr;
     std::vector<ASTNode*> then_block;
     std::vector<ASTNode*> else_block;
+};
+
+class WhileExpr : public ASTNode{
+
+public:
+
+    WhileExpr(ASTNode* expr, std::vector<ASTNode*> block):
+    expr(expr), block(block)
+    { kind = NodeKind::WhileExpr; } 
+
+    ASTNode * expr;
+    std::vector<ASTNode*> block;
+};
+
+class ForExpr : public ASTNode{
+
+public:
+
+    ForExpr(std::vector<ASTNode*> f_assign, ASTNode * expr,
+            std::vector<ASTNode*> s_assign, std::vector<ASTNode*> block):
+            f_assign(f_assign), expr(expr), s_assign(s_assign), block(block)
+            { kind = NodeKind::ForExpr; }
+
+    ASTNode * expr;
+    std::vector<ASTNode*> f_assign;
+    std::vector<ASTNode*> s_assign;
+    std::vector<ASTNode*> block;
+
 };
 
 #define DEFINE_BINARY_EXPR(name) \

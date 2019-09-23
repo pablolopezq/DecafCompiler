@@ -116,6 +116,7 @@ std::vector<ASTNode*> ExprParser::Block(){
             std::string var_name = lexer.getText();;
             advanceToken();
             if(token == Symbol::ASSIGN){
+                // std::cout << "Found assign token\n";
                 advanceToken();
                 ASTNode * expr = Expr();
                 ASTNode * assign = new VarAssignExpr(var_name, expr);
@@ -140,6 +141,65 @@ std::vector<ASTNode*> ExprParser::Block(){
                 // std::cout << "Pushing if expr\n";
                 ret.push_back(new IfExpr(expr, then_block, else_block));
             }
+        }
+        else if(token == Symbol::KW_WHILE){
+            advanceToken();
+            expect(Symbol::OPEN_PAREN);
+            ASTNode * expr = Expr();
+            expect(Symbol::CLOSE_PAREN);
+            std::vector<ASTNode*> block = Block();
+            ret.push_back(new WhileExpr(expr, block));
+        }
+        else if(token == Symbol::KW_FOR){
+            std::vector<ASTNode*> f_assign;
+            std::vector<ASTNode*> s_assign;
+            std::vector<ASTNode*> block;
+            ASTNode * expr;
+            std::string name;
+            ASTNode * assign_expr;
+
+            advanceToken();
+            expect(Symbol::OPEN_PAREN);
+
+            name = lexer.getText();
+            advanceToken();
+            expect(Symbol::ASSIGN);
+            assign_expr = Expr();
+
+            f_assign.push_back(new VarAssignExpr(name, assign_expr));
+
+            while(token == Symbol::COMMA){
+                advanceToken();
+                name = lexer.getText();
+                expect(Symbol::ASSIGN);
+                assign_expr = Expr();
+                f_assign.push_back(new VarAssignExpr(name, assign_expr));
+            }
+            expect(Symbol::SEMICOLON);
+
+            expr = Expr();
+            expect(Symbol::SEMICOLON);
+
+            name = lexer.getText();
+            advanceToken();
+            expect(Symbol::ASSIGN);
+            assign_expr = Expr();
+
+            s_assign.push_back(new VarAssignExpr(name, assign_expr));
+
+            while(token == Symbol::COMMA){
+                advanceToken();
+                name = lexer.getText();
+                expect(Symbol::ASSIGN);
+                assign_expr = Expr();
+                s_assign.push_back(new VarAssignExpr(name, assign_expr));
+            }
+
+            expect(Symbol::CLOSE_PAREN);
+
+            block = Block();
+
+            ret.push_back(new ForExpr(f_assign, expr, s_assign, block));
         }
     }
     expect(Symbol::CLOSE_KEY);
@@ -353,6 +413,7 @@ ASTNode * ExprParser::Expr9(){
     if(token == Symbol::OPEN_PAREN){
         token = lexer.getNextToken();
         ret = Expr();
+        expect(Symbol::CLOSE_PAREN);
     }
     else if(lexer.getText() == "System" || lexer.getText() == "Random"){
         ret = MethodCall();

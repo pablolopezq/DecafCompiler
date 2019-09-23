@@ -36,6 +36,8 @@ private:
 
         // Type visit(ProgramExpr * node)
         Type visit(IfExpr * node);
+        Type visit(ForExpr * node);
+        Type visit(WhileExpr * node);
         Type visit(VarAssignExpr * node);
         Type visit(MethodDeclExpr * node);
         Type visit(IdExpr * node);

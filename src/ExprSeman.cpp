@@ -136,6 +136,14 @@ Type ExprSemantic::Visitor::visit(ASTNode* node){
         return visit(reinterpret_cast<IfExpr *>(node));
         break;
 
+    case NodeKind::WhileExpr:
+        return visit(reinterpret_cast<WhileExpr *>(node));
+        break;
+
+    case NodeKind::ForExpr:
+        return visit(reinterpret_cast<ForExpr *>(node));
+        break;
+
     // case NodeKind::NegationExpr:
     //     return visit(reinterpret_cast<NegationExpr *>(node));
     //     break;
@@ -216,9 +224,6 @@ Type ExprSemantic::Visitor::visit(SubExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 
 Type ExprSemantic::Visitor::visit(SumExpr * node){
@@ -231,9 +236,6 @@ Type ExprSemantic::Visitor::visit(SumExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 Type ExprSemantic::Visitor::visit(MultExpr * node){
 
@@ -244,9 +246,6 @@ Type ExprSemantic::Visitor::visit(MultExpr * node){
 
     if(v1.type == v2.type){
         return v1.type;
-    }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
     }
 }
 Type ExprSemantic::Visitor::visit(DivExpr * node){
@@ -259,9 +258,6 @@ Type ExprSemantic::Visitor::visit(DivExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 Type ExprSemantic::Visitor::visit(ModExpr * node){
 
@@ -272,9 +268,6 @@ Type ExprSemantic::Visitor::visit(ModExpr * node){
 
     if(v1.type == v2.type){
         return v1.type;
-    }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
     }
 }
 Type ExprSemantic::Visitor::visit(ShiftRightExpr * node){
@@ -287,9 +280,6 @@ Type ExprSemantic::Visitor::visit(ShiftRightExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 Type ExprSemantic::Visitor::visit(ShiftLeftExpr * node){
 
@@ -300,9 +290,6 @@ Type ExprSemantic::Visitor::visit(ShiftLeftExpr * node){
 
     if(v1.type == v2.type){
         return v1.type;
-    }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
     }
 }
 Type ExprSemantic::Visitor::visit(GreaterEqualExpr * node){
@@ -315,9 +302,6 @@ Type ExprSemantic::Visitor::visit(GreaterEqualExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 Type ExprSemantic::Visitor::visit(GreaterExpr * node){
 
@@ -328,9 +312,6 @@ Type ExprSemantic::Visitor::visit(GreaterExpr * node){
 
     if(v1.type == v2.type){
         return v1.type;
-    }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
     }
 }
 Type ExprSemantic::Visitor::visit(LessEqualExpr * node){
@@ -343,9 +324,6 @@ Type ExprSemantic::Visitor::visit(LessEqualExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 Type ExprSemantic::Visitor::visit(LessExpr * node){
 
@@ -356,9 +334,6 @@ Type ExprSemantic::Visitor::visit(LessExpr * node){
 
     if(v1.type == v2.type){
         return v1.type;
-    }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
     }
 }
 Type ExprSemantic::Visitor::visit(EqualExpr * node){
@@ -371,9 +346,6 @@ Type ExprSemantic::Visitor::visit(EqualExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 Type ExprSemantic::Visitor::visit(NotEqualExpr * node){
 
@@ -384,9 +356,6 @@ Type ExprSemantic::Visitor::visit(NotEqualExpr * node){
 
     if(v1.type == v2.type){
         return v1.type;
-    }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
     }
 }
 Type ExprSemantic::Visitor::visit(AndExpr * node){
@@ -399,10 +368,8 @@ Type ExprSemantic::Visitor::visit(AndExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
+
 Type ExprSemantic::Visitor::visit(OrExpr * node){
 
     Value v1, v2;
@@ -413,12 +380,27 @@ Type ExprSemantic::Visitor::visit(OrExpr * node){
     if(v1.type == v2.type){
         return v1.type;
     }
-    else{
-        throw std::string("Error - Tried to operate different types\n");
-    }
 }
 
 Type ExprSemantic::Visitor::visit(IfExpr * node){
+    
+    Value val = visit(node->expr);
+    if(val.type == Type::Bool){
+        return val.type;
+    }
+    return Type::Void;
+}
+
+Type ExprSemantic::Visitor::visit(WhileExpr * node){
+    
+    Value val = visit(node->expr);
+    if(val.type == Type::Bool){
+        return val.type;
+    }
+    return Type::Void;
+}
+
+Type ExprSemantic::Visitor::visit(ForExpr * node){
     
     Value val = visit(node->expr);
     if(val.type == Type::Bool){

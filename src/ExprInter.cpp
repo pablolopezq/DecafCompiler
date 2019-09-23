@@ -134,6 +134,16 @@ Value ExprInter::Visitor::visit(ASTNode * node){
         return visit(reinterpret_cast<IfExpr *>(node));
         break;
 
+    case NodeKind::WhileExpr:
+        // std::cout << "Found if expr\n";
+        return visit(reinterpret_cast<WhileExpr *>(node));
+        break;
+
+    case NodeKind::ForExpr:
+        // std::cout << "Found for expr\n";
+        return visit(reinterpret_cast<ForExpr *>(node));
+        break;
+
     // case NodeKind::AndExpr:
     //     return visit(reinterpret_cast<AndExpr *>(node));
     //     break;
@@ -615,5 +625,46 @@ Value ExprInter::Visitor::visit(IfExpr * node){
         for(ASTNode* s : else_block){
             visit(s);
         }
+    }
+}
+
+Value ExprInter::Visitor::visit(WhileExpr * node){
+
+    Value val = visit(node->expr);
+    std::vector<ASTNode*> block = node->block;
+
+    while(val.bool_val){
+        for(ASTNode* s : block){
+            visit(s);
+        }
+        val = visit(node->expr);
+    }
+}
+
+Value ExprInter::Visitor::visit(ForExpr * node){
+
+    // std::cout << "Visiting for\n";
+
+    Value val = visit(node->expr);
+    std::vector<ASTNode*> block = node->block;
+    std::vector<ASTNode*> f_assign = node->f_assign;
+    std::vector<ASTNode*> s_assign = node->s_assign;
+
+    for(ASTNode * s : f_assign){
+        visit(s);
+    }
+
+    while(val.bool_val){
+
+        for(ASTNode * s : block){
+            visit(s);
+        }
+
+        for(ASTNode * s : s_assign){
+        visit(s);
+        }
+
+        val = visit(node->expr);
+        // std::cout << "iter\n";
     }
 }
