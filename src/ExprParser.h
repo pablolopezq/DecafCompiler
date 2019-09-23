@@ -8,12 +8,19 @@ class ExprParser{
 
 public:
 	ExprParser(ExprLexer& lexer) : lexer(lexer) {}
+
 	void parse();
+
+    std::vector<ASTNode*> get_statements(){
+        return statements;
+    }
 
 private:
 
     ExprLexer &lexer;
     Symbol token;
+
+    std::vector<ASTNode*> statements;
 
     // void Program();
     // void ClassName();
@@ -47,6 +54,12 @@ private:
     ASTNode * MethodCall();
     ASTNode * HandleID();
     ASTNode * Args();
+    ASTNode * Argument();
+    ASTNode * Program();
+
+    void advanceToken(){
+        token = lexer.getNextToken();
+    }
 
     void throw_error(std::string error){
         throw error;

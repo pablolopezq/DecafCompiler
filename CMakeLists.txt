@@ -10,6 +10,8 @@ include_directories(${PROJECT_SOURCE_DIR})
 add_executable(${PROJECT_NAME}
                     src/main.cpp
                     src/ExprLexer.cpp
-                    src/ExprParser.cpp)
+                    src/ExprParser.cpp
+                    src/ExprSeman.cpp
+                    src/ExprInter.cpp)
 
 target_link_libraries(${PROJECT_NAME} -static-libgcc -static-libstdc++ -L/usr/X11/lib -lX11 -lstdc++)
