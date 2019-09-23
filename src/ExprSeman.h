@@ -34,7 +34,8 @@ private:
     private:
         SymbTbl& tbl;
 
-        // Type visit(ProgramExpr * node);
+        // Type visit(ProgramExpr * node)
+        Type visit(IfExpr * node);
         Type visit(VarAssignExpr * node);
         Type visit(MethodDeclExpr * node);
         Type visit(IdExpr * node);

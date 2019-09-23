@@ -132,7 +132,8 @@ enum class NodeKind{
     MethodDeclExpr,
     FieldAssignExpr,
     BlockExpr,
-    VarAssignExpr
+    VarAssignExpr,
+    IfExpr,
 };
 
 class ASTNode {
@@ -296,6 +297,19 @@ public:
     NegationExpr(ASTNode * expr) : expr(expr) { kind = NodeKind::NegationExpr; }
 
     ASTNode * expr;
+};
+
+class IfExpr : public ASTNode{
+
+public:
+
+    IfExpr(ASTNode* expr, std::vector<ASTNode*> then_block, std::vector<ASTNode*> else_block):
+    expr(expr), then_block(then_block), else_block(else_block) 
+    { kind = NodeKind::IfExpr; } 
+
+    ASTNode * expr;
+    std::vector<ASTNode*> then_block;
+    std::vector<ASTNode*> else_block;
 };
 
 #define DEFINE_BINARY_EXPR(name) \

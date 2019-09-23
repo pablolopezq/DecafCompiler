@@ -123,6 +123,24 @@ std::vector<ASTNode*> ExprParser::Block(){
             }
             expect(Symbol::SEMICOLON);
         }
+        else if(token == Symbol::KW_IF){
+            advanceToken();
+            expect(Symbol::OPEN_PAREN);
+            ASTNode * expr = Expr();
+            expect(Symbol::CLOSE_PAREN);
+            std::vector<ASTNode*> then_block = Block();
+            std::vector<ASTNode*> else_block;
+            if(token == Symbol::KW_ELSE){
+                advanceToken();
+                else_block = Block();
+                // std::cout << "Pushing if expr\n";
+                ret.push_back(new IfExpr(expr, then_block, else_block));
+            }
+            else{
+                // std::cout << "Pushing if expr\n";
+                ret.push_back(new IfExpr(expr, then_block, else_block));
+            }
+        }
     }
     expect(Symbol::CLOSE_KEY);
     return ret;

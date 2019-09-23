@@ -132,6 +132,10 @@ Type ExprSemantic::Visitor::visit(ASTNode* node){
         return visit(reinterpret_cast<OrExpr *>(node));
         break;
 
+    case NodeKind::IfExpr:
+        return visit(reinterpret_cast<IfExpr *>(node));
+        break;
+
     // case NodeKind::NegationExpr:
     //     return visit(reinterpret_cast<NegationExpr *>(node));
     //     break;
@@ -200,7 +204,7 @@ Type ExprSemantic::Visitor::visit(BoolExpr * node){
     return Type::Bool;
 }
 Type ExprSemantic::Visitor::visit(StringExpr * node){
-    return Type::Char;
+    return Type::String;
 }
 Type ExprSemantic::Visitor::visit(SubExpr * node){
 
@@ -412,6 +416,15 @@ Type ExprSemantic::Visitor::visit(OrExpr * node){
     else{
         throw std::string("Error - Tried to operate different types\n");
     }
+}
+
+Type ExprSemantic::Visitor::visit(IfExpr * node){
+    
+    Value val = visit(node->expr);
+    if(val.type == Type::Bool){
+        return val.type;
+    }
+    return Type::Void;
 }
 // Type ExprSemantic::Visitor::visit(NegationExpr * node){
 

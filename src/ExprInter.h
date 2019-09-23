@@ -33,6 +33,7 @@ private:
         std::vector<ASTNode*> statements;
 
         Value visit(VarAssignExpr * node);
+        Value visit(IfExpr * node);
         Value visit(IdExpr * node);
         Value visit(MethodCallExpr * node);
         Value visit(MethodDeclExpr * node);

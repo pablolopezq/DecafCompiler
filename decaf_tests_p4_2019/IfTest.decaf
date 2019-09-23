@@ -18,10 +18,10 @@ class IfTest {
         System.out.println(y);
 
         if (x == y) {
-            System.out.print ("X is equal to Y\n");
+            System.out.println ("X is equal to Y");
         }
         else {
-            System.out.print("X is not equal to Y\n");
+            System.out.println("X is not equal to Y");
         }
         
         x = 456;
@@ -33,10 +33,10 @@ class IfTest {
         System.out.println(y);
 
         if (x == y) {
-            System.out.print ("X is equal to Y\n");
+            System.out.println ("X is equal to Y");
         }
         else {
-            System.out.print("X is not equal to Y\n");
+            System.out.println("X is not equal to Y");
         }
     }
 }
