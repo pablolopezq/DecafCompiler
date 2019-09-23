@@ -86,13 +86,13 @@ struct Value{
 
     Value operator ==(Value v){
         Value ret(Type::Bool);
-        ret.bool_val = this->bool_val == v.bool_val;
+        ret.bool_val = this->num_val == v.num_val;
         return ret;
     }
 
     Value operator !=(Value v){
         Value ret(Type::Bool);
-        ret.bool_val = this->bool_val != v.bool_val;
+        ret.bool_val = this->num_val != v.num_val;
         return ret;
     }
     
