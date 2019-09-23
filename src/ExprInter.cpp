@@ -159,7 +159,11 @@ Value ExprInter::Visitor::visit(PrintExpr * node){
     switch (arg_kind){
     case NodeKind::StringExpr:{
         StringExpr* arg = reinterpret_cast<StringExpr*>(node->argument);
-        std::cout << arg->value;
+        std::string val = arg->value;
+        val.pop_back();
+        val.erase(0,1);
+
+        std::cout << val;
         // std::cout << visit(reinterpret_cast<StringExpr*>(node->argument)).string_val;
         break;
     }
@@ -198,6 +202,48 @@ Value ExprInter::Visitor::visit(PrintExpr * node){
         std::cout << div.num_val << std::endl;
         break;
     }
+    case NodeKind::GreaterExpr:{
+        GreaterExpr* arg = reinterpret_cast<GreaterExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::LessExpr:{
+        LessExpr* arg = reinterpret_cast<LessExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::GreaterEqualExpr:{
+        GreaterEqualExpr* arg = reinterpret_cast<GreaterEqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::LessEqualExpr:{
+        LessEqualExpr* arg = reinterpret_cast<LessEqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::EqualExpr:{
+        EqualExpr* arg = reinterpret_cast<EqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::NotEqualExpr:{
+        NotEqualExpr* arg = reinterpret_cast<NotEqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
     case NodeKind::IdExpr:{
         IdExpr* arg = reinterpret_cast<IdExpr*>(node->argument);
         Value id = visit(arg);
@@ -224,6 +270,10 @@ Value ExprInter::Visitor::visit(PrintlnExpr * node){
     case NodeKind::StringExpr:{
         // std::cout << "Found string expr\n";
         StringExpr* arg = reinterpret_cast<StringExpr*>(node->argument);
+        std::string val = arg->value;
+        // val.pop_back();
+        // val.erase(val[0]);
+
         std::cout << arg->value << std::endl;
         // std::cout << visit(reinterpret_cast<StringExpr*>(node->argument)).string_val;
         break;
@@ -266,6 +316,48 @@ Value ExprInter::Visitor::visit(PrintlnExpr * node){
         ModExpr* arg = reinterpret_cast<ModExpr*>(node->argument);
         Value div = visit(arg);
         std::cout << div.num_val << std::endl;
+        break;
+    }
+    case NodeKind::GreaterExpr:{
+        GreaterExpr* arg = reinterpret_cast<GreaterExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::LessExpr:{
+        LessExpr* arg = reinterpret_cast<LessExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::GreaterEqualExpr:{
+        GreaterEqualExpr* arg = reinterpret_cast<GreaterEqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::LessEqualExpr:{
+        LessEqualExpr* arg = reinterpret_cast<LessEqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::EqualExpr:{
+        EqualExpr* arg = reinterpret_cast<EqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
+        break;
+    }
+    case NodeKind::NotEqualExpr:{
+        NotEqualExpr* arg = reinterpret_cast<NotEqualExpr*>(node->argument);
+        Value div = visit(arg);
+        std::cout << std::boolalpha;
+        std::cout << div.bool_val << std::endl;
         break;
     }
     case NodeKind::IdExpr:{
@@ -353,7 +445,7 @@ Value ExprInter::Visitor::visit(VarAssignExpr * node){
     // std::cout << "Assigning value to " << node->name << std::endl;
     Value expr = visit(node->expr);
     it->second = expr;
-    std::cout << it->second.num_val << "\n";
+    // std::cout << it->second.num_val << "\n";
 
     return val;
 }
