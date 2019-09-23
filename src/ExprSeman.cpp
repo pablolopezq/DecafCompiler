@@ -144,6 +144,10 @@ Type ExprSemantic::Visitor::visit(ASTNode* node){
         return visit(reinterpret_cast<ForExpr *>(node));
         break;
 
+    case NodeKind::ReturnExpr:
+        return visit(reinterpret_cast<ReturnExpr *>(node));
+        break;
+
     // case NodeKind::NegationExpr:
     //     return visit(reinterpret_cast<NegationExpr *>(node));
     //     break;
@@ -185,6 +189,7 @@ Type ExprSemantic::Visitor::visit(FieldExpr* node){
     SymbTbl::iterator it = tbl.find(node->name);
     if(it == tbl.end()){
         tbl.emplace(node->name, node->type);
+        // std::cout << "Defined\n";
     }
     else{
         throw std::string("Variable " + node->name + " is already defined\n");
@@ -406,6 +411,10 @@ Type ExprSemantic::Visitor::visit(ForExpr * node){
     if(val.type == Type::Bool){
         return val.type;
     }
+    return Type::Void;
+}
+
+Type ExprSemantic::Visitor::visit(ReturnExpr * node){
     return Type::Void;
 }
 // Type ExprSemantic::Visitor::visit(NegationExpr * node){

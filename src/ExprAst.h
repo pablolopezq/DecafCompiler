@@ -62,25 +62,25 @@ struct Value{
 
     Value operator <(Value v){
         Value ret(Type::Bool);
-        ret.bool_val = this->bool_val < v.bool_val;
+        ret.bool_val = this->num_val < v.num_val;
         return ret;
     }
 
     Value operator >(Value v){
         Value ret(Type::Bool);
-        ret.bool_val = this->bool_val > v.bool_val;
+        ret.bool_val = this->num_val > v.num_val;
         return ret;
     }
 
     Value operator <=(Value v){
         Value ret(Type::Bool);
-        ret.bool_val = this->bool_val <= v.bool_val;
+        ret.bool_val = this->num_val <= v.num_val;
         return ret;
     }
 
     Value operator >=(Value v){
         Value ret(Type::Bool);
-        ret.bool_val = this->bool_val >= v.bool_val;
+        ret.bool_val = this->num_val >= v.num_val;
         return ret;
     }
 
@@ -135,7 +135,8 @@ enum class NodeKind{
     VarAssignExpr,
     IfExpr,
     WhileExpr,
-    ForExpr
+    ForExpr,
+    ReturnExpr
 };
 
 class ASTNode {
@@ -306,7 +307,7 @@ class IfExpr : public ASTNode{
 public:
 
     IfExpr(ASTNode* expr, std::vector<ASTNode*> then_block, std::vector<ASTNode*> else_block):
-    expr(expr), then_block(then_block), else_block(else_block) 
+    expr(expr), then_block(then_block), else_block(else_block)
     { kind = NodeKind::IfExpr; } 
 
     ASTNode * expr;
@@ -340,6 +341,14 @@ public:
     std::vector<ASTNode*> s_assign;
     std::vector<ASTNode*> block;
 
+};
+
+class ReturnExpr : public ASTNode{
+
+public:
+    ReturnExpr(ASTNode * expr) : expr(expr) { kind = NodeKind::ReturnExpr; }
+
+    ASTNode * expr;
 };
 
 #define DEFINE_BINARY_EXPR(name) \

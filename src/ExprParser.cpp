@@ -43,31 +43,44 @@ ASTNode * ExprParser::Program(){
             ASTNode* push = new MethodDeclExpr(Type::Void, method_name, args, block);
             statements.push_back(push);
         }
-        // else if(token == Symbol::KW_BOOL){
-        //     advanceToken();
-        //     std::string name = lexer.getText();
-        //     expect(Symbol::ID);
-        //     if(token == Symbol::ASSIGN){
-        //         advanceToken();
-        //         ASTNode * con = Constant();
-        //         expect(Symbol::SEMICOLON);
-        //         fields.push_back(new FieldAssignExpr(Type::Bool, name, con));
-        //     }
-        //     else if(token == Symbol::OPEN_PAREN){
+        else if(token == Symbol::KW_INT){
+            std::vector<ASTNode*> args;
+            std::vector<ASTNode*> block;
+            std::string name;
+            Type type;
+            std::string var_name;
 
-        //     }
-        // }
-        // else if(token == Symbol::KW_INT){
-        //     advanceToken();
-        //     std::string name = lexer.getText();
-        //     expect(Symbol::ID);
-        //     if(token == Symbol::ASSIGN){
-        //         advanceToken();
-        //         ASTNode * con = Constant();
-        //         expect(Symbol::SEMICOLON);
-        //         fields.push_back(new FieldAssignExpr(Type::Int, name, con));
-        //     }
-        // }
+            advanceToken();
+            name = lexer.getText();
+            expect(Symbol::ID);
+            expect(Symbol::OPEN_PAREN);
+            if(token == Symbol::KW_INT)
+                type = Type::Int;
+
+            advanceToken();
+            var_name = lexer.getText();
+            expect(Symbol::ID);
+
+            args.push_back(new FieldExpr(type, name));
+
+            while(token == Symbol::COMMA){
+                advanceToken();
+
+                if(token == Symbol::KW_INT)
+                    type = Type::Int;
+
+                advanceToken();
+                var_name = lexer.getText();
+                expect(Symbol::ID);
+
+                args.push_back(new FieldExpr(type, var_name));
+            }
+            expect(Symbol::CLOSE_PAREN);
+
+            block = Block();
+
+            statements.push_back(new MethodDeclExpr(type, name, args, block));
+        }
     }
     expect(Symbol::CLOSE_KEY);
 }
@@ -200,6 +213,16 @@ std::vector<ASTNode*> ExprParser::Block(){
             block = Block();
 
             ret.push_back(new ForExpr(f_assign, expr, s_assign, block));
+        }
+        else if(token == Symbol::KW_RETURN){
+            ASTNode * expr = nullptr;
+            advanceToken();
+            if(token != Symbol::SEMICOLON){
+                expr = Expr();
+            }
+            expect(Symbol::SEMICOLON);
+            ret.push_back(new ReturnExpr(expr));
+            // std::cout << "Found return expr\n";
         }
     }
     expect(Symbol::CLOSE_KEY);

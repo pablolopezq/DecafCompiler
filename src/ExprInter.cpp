@@ -3,7 +3,7 @@
 
 void ExprInter::execute(){
 
-    Visitor visitor(tbl, statements);
+    Visitor visitor(tbl, statements, methods);
 
     // std::cout << statements.size() << std::endl;
 
@@ -13,8 +13,34 @@ void ExprInter::execute(){
         // PrintExpr* print = reinterpret_cast<PrintExpr*>(s);
         // StringExpr* arg = reinterpret_cast<StringExpr*>(print->argument);
         // std::cout << arg->value << std::endl;
-        visitor.visit(s);
+        if(s->getKind() != NodeKind::MethodCallExpr)
+            visitor.visit(s);
     }
+
+    // std::cout << "Looking for main\n";
+
+    for(ASTNode* s : methods){
+        // PrintExpr* print = reinterpret_cast<PrintExpr*>(s);
+        // StringExpr* arg = reinterpret_cast<StringExpr*>(print->argument);
+        // std::cout << arg->value << std::endl;
+        if(s->getKind() == NodeKind::MethodDeclExpr){
+            MethodDeclExpr * call = reinterpret_cast<MethodDeclExpr*>(s);
+            // std::cout << call->name << "\n";
+            if(call->name == "main"){
+                // std::cout << "Found main\n";
+                for(ASTNode * a : call->block){
+                    visitor.visit(a);
+                }
+            }
+        }
+    }
+
+    // for(MethodDeclExpr * m : methods){
+    //     if(m->name == "main"){
+    //         visitor.visit(m);
+    //         break;
+    //     }
+    // }
 
         // std::cout << "Finished visiting\n";
 }
@@ -396,6 +422,9 @@ Value ExprInter::Visitor::visit(PrintlnExpr * node){
 Value ExprInter::Visitor::visit(IdExpr * node){
 
     SymbTbl::iterator it = tbl.find(node->name);
+    if(it == tbl.end()){
+        // std::cout << "not found\n";
+    }
     Value val(it->second.type);
     val = it->second;
     // std::cout << "\t\t" << val.num_val << '\n';
@@ -418,16 +447,27 @@ Value ExprInter::Visitor::visit(MethodCallExpr * node){
 
     Value val;
 
-    for(ASTNode* s : statements){
-        NodeKind kind = s->getKind();
-        if(kind == NodeKind::MethodCallExpr){
-            MethodCallExpr * meth_call = reinterpret_cast<MethodCallExpr*>(s);
-            if(meth_call->name == node->name){
-                // std::cout << "Found method " << meth_call->name << std::endl;
-                // for(ASTNode* s : meth_call->block){
-                //     visit(s);
-                // }
-                break;
+    // std::cout << node->name << std::endl;
+
+    // for(ASTNode* s : statements){
+    //     NodeKind kind = s->getKind();
+    //     if(kind == NodeKind::MethodCallExpr){
+    //         MethodCallExpr * meth_call = reinterpret_cast<MethodCallExpr*>(s);
+    //         if(meth_call->name == node->name){
+    //             std::cout << "Found method " << meth_call->name << std::endl;
+    //             for(ASTNode* s : methods){
+    //                 visit(s);
+    //             }
+    //             break;
+    //         }
+    //     }
+    // }
+
+    for(ASTNode * a : *methods){
+        MethodDeclExpr * method = reinterpret_cast<MethodDeclExpr*>(a);
+        if(method->name == node->name){
+            for(ASTNode * m : method->block){
+                val = visit(m);
             }
         }
     }
@@ -439,16 +479,21 @@ Value ExprInter::Visitor::visit(MethodDeclExpr * node){
 
     Value val;
 
-    if(node->name == "main"){
-        // std::cout << "Found main func of size ";        
-        // std::cout << node->block.size() << std::endl;
+    methods->push_back(node);
 
-        for(ASTNode* s : node->block){
-            // std::cout << "Visiting node\n";
-            // std::cout << node->block.size() << std::endl;
-            visit(s);
-        }
-    }
+
+    // std::cout << "Pushed " << node->name << "\n";
+
+    // if(node->name == "main"){
+    //     // std::cout << "Found main func of size ";        
+    //     // std::cout << node->block.size() << std::endl;
+
+    //     for(ASTNode* s : node->block){
+    //         // std::cout << "Visiting node\n";
+    //         // std::cout << node->block.size() << std::endl;
+    //         visit(s);
+    //     }
+    // }
 
     return val;
 }
@@ -612,17 +657,35 @@ Value ExprInter::Visitor::visit(NotEqualExpr * node){
 
 Value ExprInter::Visitor::visit(IfExpr * node){
 
+    // std::cout << "Obtaining expr..\n";
     Value val = visit(node->expr);
+    // std::cout << "Obtained expr\n";
+    Value ret;
     std::vector<ASTNode*> then_block = node->then_block;
+    // std::cout << "Obtained expr\n";
     std::vector<ASTNode*> else_block = node->else_block;
+
+    // std::cout << "Obtained expr\n";
 
     if(val.bool_val){
         for(ASTNode* s : then_block){
+            if(s->getKind() == NodeKind::ReturnExpr){
+                ReturnExpr * ret_expr = reinterpret_cast<ReturnExpr*>(s);
+                ret = visit(ret_expr->expr);
+                // std::cout << "Returning\n";
+                break;
+            }
             visit(s);
         }
     }
     else{
         for(ASTNode* s : else_block){
+            if(s->getKind() == NodeKind::ReturnExpr){
+                ReturnExpr * ret_expr = reinterpret_cast<ReturnExpr*>(s);
+                ret = visit(ret_expr->expr);
+                // std::cout << "Returning\n";
+                break;
+            }
             visit(s);
         }
     }
@@ -646,6 +709,7 @@ Value ExprInter::Visitor::visit(ForExpr * node){
     // std::cout << "Visiting for\n";
 
     Value val = visit(node->expr);
+    Value ret;
     std::vector<ASTNode*> block = node->block;
     std::vector<ASTNode*> f_assign = node->f_assign;
     std::vector<ASTNode*> s_assign = node->s_assign;
@@ -657,14 +721,20 @@ Value ExprInter::Visitor::visit(ForExpr * node){
     while(val.bool_val){
 
         for(ASTNode * s : block){
+            if(s->getKind() == NodeKind::ReturnExpr){
+                ReturnExpr * ret_expr = reinterpret_cast<ReturnExpr*>(s);
+                ret = visit(ret_expr->expr);
+                break;
+            }
             visit(s);
         }
 
         for(ASTNode * s : s_assign){
-        visit(s);
+            visit(s);
         }
 
         val = visit(node->expr);
         // std::cout << "iter\n";
     }
+    return ret;
 }

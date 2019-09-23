@@ -53,10 +53,10 @@ private:
     ASTNode * BoolConstant();
     ASTNode * MethodCall();
     ASTNode * HandleID();
-    ASTNode * Args();
     ASTNode * Argument();
     ASTNode * Program();
     ASTNode * Assign();
+    ASTNode * Args();
     std::vector<ASTNode*> Block();
     std::vector<ASTNode*> FieldDecl();
     std::vector<ASTNode*> MethodDecl();

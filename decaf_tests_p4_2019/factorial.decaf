@@ -6,13 +6,13 @@ class Factorial
 
 		x = factorial(6);
 
-		System.out.print("Factorial de \"5\" = ");
+		System.out.print("Factorial de 5 = ");
 		x = factorial(5);
 		System.out.println(x);
-		System.out.print("Factorial de \"6\" = ");
+		System.out.print("Factorial de 6 = ");
 		x = factorial(6);
 		System.out.println(x);
-		System.out.print("Factorial de \"7\" = ");
+		System.out.print("Factorial de 7 = ");
 		x = factorial(7);
 		System.out.println(x);
 	}
@@ -20,9 +20,12 @@ class Factorial
 	// Funcion que calcula el factorial
 	int factorial(int n)
 	{
+		//System.out.println("fact");
 		if (n == 0) {
+			System.out.println("fact1");
 			return (1);
 		} else {
+			System.out.println("fact1");
 			return n * factorial(n-1);
 		}
 	}

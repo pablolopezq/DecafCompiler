@@ -20,25 +20,28 @@ public:
 private:
     SymbTbl tbl;
     std::vector<ASTNode*> statements;
+    std::vector<MethodDeclExpr*> methods;
 
     class Visitor{
     
     public:
-        Visitor(SymbTbl& tbl, std::vector<ASTNode*>& statements) : tbl(tbl), statements(statements) {}
+        Visitor(SymbTbl& tbl, std::vector<ASTNode*> &statements, std::vector<MethodDeclExpr*>& methods) : tbl(tbl), statements(&statements), methods(&methods) {}
 
         Value visit(ASTNode* node);
+        Value visit(MethodDeclExpr * node);
 
     private:
         SymbTbl tbl;
-        std::vector<ASTNode*> statements;
+        std::vector<ASTNode*>* statements;
+        std::vector<MethodDeclExpr*>* methods;
 
         Value visit(VarAssignExpr * node);
         Value visit(IfExpr * node);
+        Value visit(ReturnExpr * node);
         Value visit(ForExpr * node);
         Value visit(WhileExpr * node);
         Value visit(IdExpr * node);
         Value visit(MethodCallExpr * node);
-        Value visit(MethodDeclExpr * node);
         Value visit(ArgsExpr * node);
         Value visit(PrintlnExpr * node);
         Value visit(PrintExpr * node);
